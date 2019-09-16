@@ -18,6 +18,6 @@ def filter_stop_words(frequencies: dict, stop_words: tuple) -> dict:
 
 def get_top_n(frequencies: dict, top_n: int) -> tuple:
     """
-    Takes first N popular words
+    Takes first N popular word
     """
     pass
