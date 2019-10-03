@@ -80,7 +80,7 @@ def write_to_file(path_to_file: str, content: tuple):
 
 frequencies = {}
 stop_words = ()
-top_n = 6
+top_n = 5
 lines_limit = top_n
 
 text = read_from_file("data.txt", lines_limit)
