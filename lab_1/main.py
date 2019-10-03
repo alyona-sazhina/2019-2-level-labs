@@ -78,12 +78,13 @@ def write_to_file(path_to_file: str, content: tuple):
     file.close()
 
 
+text = ''
 frequencies = {}
 stop_words = ()
 top_n = 5
 lines_limit = top_n
 
-text = read_from_file('data.txt', lines_limit)
+data = read_from_file('data.txt', lines_limit)
 freq_dict = calculate_frequences(text)
 frequencies = filter_stop_words(frequencies, stop_words)
 content = get_top_n(frequencies, top_n)
