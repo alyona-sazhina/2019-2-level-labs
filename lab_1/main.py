@@ -84,8 +84,3 @@ stop_words = ()
 top_n = 5
 lines_limit = top_n
 
-data = read_from_file('data.txt', lines_limit)
-freq_dict = calculate_frequences(text)
-frequencies = filter_stop_words(frequencies, stop_words)
-content = get_top_n(frequencies, top_n)
-write_to_file('report.txt', content)
