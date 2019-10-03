@@ -25,12 +25,9 @@ def calculate_frequences(text):
 
 
 def filter_stop_words(freq_dict, stop_words):
-    if stop_words is None or freq_dict is None:
-        if stop_words is not None:
-            return {}
-        else:
-            return freq_dict
-    elif stop_words is None and freq_dict is None:
+    if freq_dict == {} or stop_words ==() or stop_words is None:
+        return freq_dict
+    elif freq_dict is None and stop_words is None or freq_dict is None:
         return {}
     else:
         if stop_words != () and freq_dict != {}:
@@ -38,10 +35,6 @@ def filter_stop_words(freq_dict, stop_words):
                 if word not in stop_words and type(word) == str:
                     frequencies[word] = freq_dict[word]
             return frequencies
-        elif stop_words == () and freq_dict != {}:
-            return freq_dict
-        else:
-            return {}
 
 
 def get_top_n(frequencies, top_n):
