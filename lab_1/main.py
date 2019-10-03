@@ -25,7 +25,7 @@ def calculate_frequences(text):
 
 
 def filter_stop_words(freq_dict, stop_words):
-    if freq_dict == {} or stop_words ==() or stop_words is None:
+    if freq_dict == {} or stop_words == () or stop_words is None:
         return freq_dict
     elif freq_dict is None and stop_words is None or freq_dict is None:
         return {}
@@ -63,7 +63,7 @@ def read_from_file(path_to_file: str, lines_limit: int):
     text = ''
     for line in file:
         text += line
-        k +=1
+        k += 1
         if k == lines_limit:
             break
     file.close()
@@ -83,8 +83,8 @@ stop_words = ()
 top_n = 5
 lines_limit = top_n
 
-text = read_from_file("data.txt", lines_limit)
+text = read_from_file('data.txt', lines_limit)
 freq_dict = calculate_frequences(text)
 frequencies = filter_stop_words(frequencies, stop_words)
 content = get_top_n(frequencies, top_n)
-write_to_file("report.txt", content)
+write_to_file('report.txt', content)
