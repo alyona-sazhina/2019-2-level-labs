@@ -53,27 +53,38 @@ def get_top_n(frequencies, top_n):
         top_list = tuple(top_list)
         return top_list
     else:
-        return ()
+        top_list = tuple(top_list)
+        return top_list
 
 
 def read_from_file(path_to_file: str, lines_limit: int):
-    with open("data.txt") as myfile:
-        text = [next(myfile) for x in range(N)]
+    file = open(path_to_file)
+    k = 0
+    text = ''
+    for line in file:
+        text += line
+        k +=1
+        if k == lines_limit:
+            break
+    file.close()
+    return text
 
 
 def write_to_file(path_to_file: str, content: tuple):
-    top_list = open('report.txt', 'w')
+    file = open(path_to_file, 'w')
+    for i in content:
+        file.write(i)
+        file.write('\n')
+    file.close()
 
 
-text = ''
 frequencies = {}
 stop_words = ()
 top_n = 0
-N = 2
+lines_limit = top_n
 
-
-calculate_frequences(text)
-filter_stop_words(frequencies, stop_words)
-get_top_n(frequencies, top_n)
-read_from_file("data.txt", N)
-write_to_file("report.txt", get_top_n(frequencies, top_n))
+text = read_from_file("data.txt", lines_limit)
+freq_dict = calculate_frequences(text)
+frequencies = filter_stop_words(frequencies, stop_words)
+content = get_top_n(frequencies, top_n)
+write_to_file("report.txt", content)
