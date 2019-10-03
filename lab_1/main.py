@@ -5,7 +5,6 @@ Count frequencies dictionary by the given arbitrary text
 
 
 def calculate_frequences(text):
-    t1 = []
     freq_dict = {}
     if type(text) is str and text != '':
         text1 = text.lower()
@@ -14,10 +13,9 @@ def calculate_frequences(text):
                 text1 = text1.replace(i, '')
         t = text1.split(' ')
         for word in t:
-            if word != '':
-                t1.append(word)
-        for word in t1:
-            if word in freq_dict:
+            if word == '':
+                continue
+            elif word in freq_dict:
                 freq_dict[word] += 1
             else:
                 freq_dict[word] = 1
@@ -26,17 +24,13 @@ def calculate_frequences(text):
         return freq_dict
 
 
-text = ""
-frequencies = {}
-stop_words = ()
-
-
 def filter_stop_words(freq_dict, stop_words):
-    if stop_words == None or freq_dict == None:
-        if stop_words != None:
+    if stop_words is None or freq_dict is None:
+        if stop_words is not None:
             return {}
-        else: return freq_dict
-    elif stop_words == None and freq_dict == None:
+        else:
+            return freq_dict
+    elif stop_words is None and freq_dict is None:
         return {}
     else:
         if stop_words != () and freq_dict != {}:
@@ -46,31 +40,46 @@ def filter_stop_words(freq_dict, stop_words):
             return frequencies
         elif stop_words == () and freq_dict != {}:
             return freq_dict
-        else: return {}
+        else:
+            return {}
 
-top_n = 5
 
 def get_top_n(frequencies, top_n):
     list_frequencies = list(frequencies.items())
     list_frequencies.sort(key=lambda i: i[1], reverse=True)
-    toplist = []
+    top_list = []
     if top_n > 0:
         for i in list_frequencies:
-            toplist += i
+            top_list += i
             top_n -= 1
             if top_n == 0:
                 break
-        for i in toplist:
+        for i in top_list:
             if type(i) is int:
-                toplist.remove(i)
-        toplist = tuple(toplist)
-        return toplist
+                top_list.remove(i)
+        top_list = tuple(top_list)
+        return top_list
     else:
         return ()
 
 
+def read_from_file(path_to_file: str, lines_limit: int):
+    with open("data.txt") as myfile:
+        text = [next(myfile) for x in range(N)]
+
+
+def write_to_file(path_to_file: str, content: tuple):
+    top_list = open('report.txt', 'w')
+
+
+text = ''
+frequencies = {}
+stop_words = ()
+top_n = 0
+N = 2
+
 calculate_frequences(text)
 filter_stop_words(frequencies, stop_words)
 get_top_n(frequencies, top_n)
-
-
+read_from_file("data.txt", N)
+write_to_file('report.txt', get_top_n)
