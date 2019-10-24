@@ -4,83 +4,92 @@ Count frequencies dictionary by the given arbitrary text
 """
 
 
-def calculate_frequences(text):
-    freq_dict = {}
-    if type(text) is str and text != '':
-        text1 = text.lower()
-        for i in text1:
-            if i not in 'abcdefghijklmnopqrstuvwxyz ':
-                text1 = text1.replace(i, '')
-        t = text1.split(' ')
-        for word in t:
-            if word == '':
-                continue
-            elif word in freq_dict:
-                freq_dict[word] += 1
-            else:
-                freq_dict[word] = 1
-        return freq_dict
-    else:
-        return freq_dict
+def calculate_frequences(text: str) -> dict:
+    """
+    Calculates number of times each word appears in the text
+    """
+    frequencies = {}
+    new_text = ''
+    if text is None:
+        return frequencies
+    if not isinstance(text, str):
+        text = str(text)
+    for symbol in text:
+        if symbol.isalpha() or symbol == ' ':
+            new_text += symbol
+    new_text = new_text.lower()
+    words = new_text.split()
+    for key in words:
+        key = key.lower()
+        if key in frequencies:
+            value = frequencies[key]
+            frequencies[key] = value + 1
+        else:
+            frequencies[key] = 1
+    return frequencies
 
 
-def filter_stop_words(freq_dict, stop_words):
-    if freq_dict == {} or stop_words == () or stop_words is None:
-        return freq_dict
-    elif freq_dict is None and stop_words is None or freq_dict is None:
-        return {}
-    else:
-        if stop_words != () and freq_dict != {}:
-            for word in freq_dict.keys():
-                if word not in stop_words and type(word) == str:
-                    frequencies[word] = freq_dict[word]
-            return frequencies
+def filter_stop_words(frequencies: dict, stop_words: tuple) -> dict:
+    """
+    Removes all stop words from the given frequencies dictionary
+    """
+    if frequencies is None:
+        frequencies = {}
+        return frequencies
+    for word in list(frequencies):
+        if not isinstance(word, str):
+            del frequencies[word]
+    if not isinstance(stop_words, tuple):
+        return frequencies
+    for word in stop_words:
+        if not isinstance(word, str):
+            continue
+        if frequencies.get(word) is not None:
+            del frequencies[word]
+    return frequencies
 
 
-def get_top_n(frequencies, top_n):
-    list_frequencies = list(frequencies.items())
-    list_frequencies.sort(key=lambda i: i[1], reverse=True)
-    top_list = []
-    if top_n > 0:
-        for i in list_frequencies:
-            top_list += i
-            top_n -= 1
-            if top_n == 0:
-                break
-        for i in top_list:
-            if type(i) is int:
-                top_list.remove(i)
-        top_list = tuple(top_list)
-        return top_list
-    else:
-        top_list = tuple(top_list)
-        return top_list
+def get_top_n(frequencies: dict, top_n: int) -> tuple:
+    """
+    Takes first N popular words
+    :param
+    """
+    if not isinstance(top_n, int):
+        frequencies = ()
+        return frequencies
+    if top_n < 0:
+        top_n = 0
+    elif top_n > len(frequencies):
+        top_n = len(frequencies)
+    top_words = sorted(frequencies, key=lambda x: int(frequencies[x]), reverse=True)
+    best = tuple(top_words[:top_n])
+    return best
 
 
-def read_from_file(path_to_file: str, lines_limit: int):
+def read_from_file(path_to_file: str, lines_limit: int) -> str:
+    """
+    Read text from file
+    """
     file = open(path_to_file)
-    k = 0
+    counter = 0
     text = ''
+    if file is None:
+        return text
     for line in file:
         text += line
-        k += 1
-        if k == lines_limit:
+        counter += 1
+        if counter == lines_limit:
             break
     file.close()
     return text
 
 
 def write_to_file(path_to_file: str, content: tuple):
+    """
+    Creates new file
+    """
     file = open(path_to_file, 'w')
     for i in content:
         file.write(i)
         file.write('\n')
     file.close()
-
-
-text = ''
-frequencies = {}
-stop_words = ()
-top_n = 5
-lines_limit = top_n
-
