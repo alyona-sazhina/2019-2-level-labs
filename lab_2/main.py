@@ -23,7 +23,6 @@ def initialize_edit_matrix(edit_matrix: tuple, add_weight: int, remove_weight: i
             edit_matrix[0][0] = 0
             edit_matrix[0][j] = edit_matrix[0][j - 1] + add_weight
             j += 1
-        print(edit_matrix)
         return edit_matrix
     else:
         return edit_matrix
@@ -79,7 +78,6 @@ def load_from_csv(path_to_file):
             row1.append(int(i))
         edit_matrix.append(row1)
     file.close()
-    print(edit_matrix)
     return edit_matrix
 
 
@@ -96,7 +94,6 @@ def find_distance(original_word: str,
         initialize_edit_matrix(tuple(edit_matrix), add_weight, remove_weight)
         fill_edit_matrix(edit_matrix, add_weight, remove_weight, substitute_weight, original_word, target_word)
         save_to_csv(edit_matrix, 'save.csv')
-        print(edit_matrix[num_rows - 1][num_cols - 1])
         return edit_matrix[num_rows - 1][num_cols - 1]
     else:
         return -1
