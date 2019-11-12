@@ -61,8 +61,13 @@ def fill_edit_matrix(edit_matrix: tuple,
 def save_to_csv(edit_matrix, path_to_file):
     file = open(path_to_file, 'w')
     for i in edit_matrix:
+        k = 0
         for j in i:
-            a = str(j) + ','
+            k += 1
+            if k < len(i):
+                a = str(j) + ','
+            else:
+                a = str(j)
             file.write(a)
         file.write('\n')
     file.close()
@@ -73,10 +78,9 @@ def load_from_csv(path_to_file):
     edit_matrix = []
     for line in file:
         row = line.split(',')
-        row1 = []
         for i in row:
-            row1.append(int(i))
-        edit_matrix.append(row1)
+            int(i)
+        edit_matrix.append(row)
     file.close()
     return edit_matrix
 
