@@ -78,9 +78,10 @@ def load_from_csv(path_to_file):
     edit_matrix = []
     for line in file:
         row = line.split(',')
+        row1 = []
         for i in row:
-            int(i)
-        edit_matrix.append(row)
+            row1.append(int(i))
+        edit_matrix.append(row1)
     file.close()
     return edit_matrix
 
