@@ -42,14 +42,14 @@ class NGramTrie:
         self.gram_log_probabilities = {}
 
     def fill_from_sentence(self, sentence: tuple):
-        if type(sentence) == tuple:
+        if isinstance(sentence,tuple):
             for i in range(len(sentence) - self.size + 1):
-                a = [sentence[i + b] for b in range(self.size)]
-                a = tuple(a)
-                if a in self.gram_frequencies.keys():
-                    self.gram_frequencies[a] += 1
+                key_n_gram = [sentence[i + b] for b in range(self.size)]
+                key_n_gram = tuple(key_n_gram)
+                if key_n_gram in self.gram_frequencies.keys():
+                    self.gram_frequencies[key_n_gram] += 1
                 else:
-                    self.gram_frequencies[a] = 1
+                    self.gram_frequencies[key_n_gram] = 1
             return self.gram_frequencies
         return []
 
@@ -62,44 +62,12 @@ class NGramTrie:
                 dictionary[i[:self.size - 1]] += j
         for i, j in self.gram_frequencies.items():
             if i not in self.gram_log_probabilities:
-                p = j / dictionary[i[:self.size - 1]]
-                self.gram_log_probabilities[i] = math.log(p)
+                probability = j / dictionary[i[:self.size - 1]]
+                self.gram_log_probabilities[i] = math.log(probability)
         return self.gram_log_probabilities
-
-    def calculate_log_probabilities1(self):
-        for i, j in self.gram_frequencies.items():
-            counter = 0
-            if i in self.gram_log_probabilities.keys():
-                continue
-            for a in self.gram_frequencies:
-                if i[:self.size - 1] == a[:self.size - 1]:
-                    counter += self.gram_frequencies[a]
-            p = j / counter
-            self.gram_log_probabilities[i] = math.log(p)
-        return self.gram_log_probabilities
-
-    def predict_next_sentence1(self, prefix):
-        maximum = -32000
-        key = prefix
-        if type(prefix) == tuple and len(prefix) == self.size - 1:
-            for a, b in self.gram_log_probabilities.items():
-                if key[-1] != a[0]:
-                    continue
-                for i, j in self.gram_log_probabilities.items():
-                    if key[-1] != a[0] and j > maximum:
-                        maximum = j
-                key = list(key)
-                if maximum == -32000:
-                    return key
-                for i, j in self.gram_log_probabilities.items():
-                    if j == maximum:
-                        key.append(i[-1])
-                        break
-            return key
-        return []
 
     def predict_next_sentence(self, prefix):
-        if type(prefix) == tuple and len(prefix) == self.size - 1:
+        if isinstance(prefix,tuple) and len(prefix) == self.size - 1:
             print(len(self.gram_log_probabilities))
             for a in range(round(len(self.gram_log_probabilities)/2)):
                 maximum = -32000
@@ -164,7 +132,6 @@ def split_by_sentence(text: str) -> list:
 def big_text():
     storage_instance = WordStorage()
     a = NGramTrie(3)
-    #corpus = split_by_sentence('Mary wanted to swim. However, she was afraid of sharks! Mary wanted. Mary wanted. However, she was.')
     corpus = split_by_sentence(REFERENCE_TEXT)
     for j in corpus:
         storage_instance.from_corpus(tuple(j))
