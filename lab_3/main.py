@@ -159,3 +159,21 @@ def split_by_sentence(text: str) -> list:
         words = ['<s>'] + words + ['</s>']
         corpus.append(words)
     return corpus
+
+
+def big_text():
+    storage_instance = WordStorage()
+    a = NGramTrie(3)
+    #corpus = split_by_sentence('Mary wanted to swim. However, she was afraid of sharks! Mary wanted. Mary wanted. However, she was.')
+    corpus = split_by_sentence(REFERENCE_TEXT)
+    for j in corpus:
+        storage_instance.from_corpus(tuple(j))
+    encoded_corpus = encode(storage_instance, corpus)
+    a.fill_from_sentence(encoded_corpus)
+    a.calculate_log_probabilities()
+    prediction = ''
+    predict = a.predict_next_sentence((1, 301))
+    print(predict)
+    for i in range(len(predict)):
+        prediction = prediction + storage_instance.get_original_by(predict[i]) + ' '
+    print(prediction)
