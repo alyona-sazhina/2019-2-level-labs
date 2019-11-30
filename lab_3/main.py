@@ -26,9 +26,9 @@ class WordStorage:
             return self.storage[word]
         return -1
 
-    def get_original_by(self, id):
+    def get_original_by(self, id_):
         for word, i in self.storage.items():
-            if i == id:
+            if i == id_:
                 return word
         return 'UNK'
 
@@ -146,6 +146,6 @@ def big_text():
     prediction = ''
     predict = n_gram_instance.predict_next_sentence((1, 301))
     print(predict)
-    for i in range(len(predict)):
-        prediction = prediction + storage_instance.get_original_by(predict[i]) + ' '
+    for i in enumerate(predict):
+        prediction = prediction + storage_instance.get_original_by(predict[i[1]]) + ' '
     print(prediction)
