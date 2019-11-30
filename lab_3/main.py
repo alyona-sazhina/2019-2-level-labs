@@ -1,3 +1,8 @@
+"""
+Labour work #3
+ Building an own N-gram model
+"""
+
 import math
 
 REFERENCE_TEXT = ''
@@ -69,12 +74,12 @@ class NGramTrie:
     def predict_next_sentence(self, prefix):
         if isinstance(prefix, tuple) and len(prefix) == self.size - 1:
             print(len(self.gram_log_probabilities))
-            for a in range(round(len(self.gram_log_probabilities)/2)):
+            for k in range(round(len(self.gram_log_probabilities)/2)):
                 maximum = -32000
                 prefix = list(prefix)
                 for i, j in self.gram_log_probabilities.items():
                     i = list(i)
-                    if prefix[a:] == i[:self.size - 1]:
+                    if prefix[k:] == i[:self.size - 1]:
                         if j > maximum:
                             maximum = j
                 if maximum == -32000:
