@@ -11,7 +11,7 @@ class WordStorage:
         self.storage = {}
 
     def put(self, word):
-        if word not in self.storage and type(word) == str:
+        if word not in self.storage and isinstance(word, str):
             self.storage[word] = len(self.storage)
             return self.storage[word]
         return {}
@@ -28,7 +28,7 @@ class WordStorage:
         return 'UNK'
 
     def from_corpus(self, corpus):
-        if type(corpus) == tuple:
+        if isinstance(corpus, tuple):
             for word in corpus:
                 self.put(word)
             return self.storage
@@ -42,7 +42,7 @@ class NGramTrie:
         self.gram_log_probabilities = {}
 
     def fill_from_sentence(self, sentence: tuple):
-        if isinstance(sentence,tuple):
+        if isinstance(sentence, tuple):
             for i in range(len(sentence) - self.size + 1):
                 key_n_gram = [sentence[i + b] for b in range(self.size)]
                 key_n_gram = tuple(key_n_gram)
@@ -67,7 +67,7 @@ class NGramTrie:
         return self.gram_log_probabilities
 
     def predict_next_sentence(self, prefix):
-        if isinstance(prefix,tuple) and len(prefix) == self.size - 1:
+        if isinstance(prefix, tuple) and len(prefix) == self.size - 1:
             print(len(self.gram_log_probabilities))
             for a in range(round(len(self.gram_log_probabilities)/2)):
                 maximum = -32000
@@ -112,14 +112,14 @@ def split_by_sentence(text: str) -> list:
                 new_text += symbol
     sent_list = []
     new_text += ' A'
-    a = 0
+    counter = 0
     for i in range(len(new_text[:-2])):
         if new_text[i] == '.' and new_text[i+1] == ' ' and (new_text[i+2].isupper() or new_text[i+2] == ' '):
-            sent_list.append(new_text[a:i])
+            sent_list.append(new_text[counter:i])
             if new_text[i+2] == ' ':
-                a = i + 3
+                counter = i + 3
             else:
-                a = i + 2
+                counter = i + 2
     corpus = []
     for sent in sent_list:
         words1 = sent.split(' ')
@@ -131,15 +131,15 @@ def split_by_sentence(text: str) -> list:
 
 def big_text():
     storage_instance = WordStorage()
-    a = NGramTrie(3)
+    n_gram_instance = NGramTrie(3)
     corpus = split_by_sentence(REFERENCE_TEXT)
     for j in corpus:
         storage_instance.from_corpus(tuple(j))
     encoded_corpus = encode(storage_instance, corpus)
-    a.fill_from_sentence(encoded_corpus)
-    a.calculate_log_probabilities()
+    n_gram_instance.fill_from_sentence(encoded_corpus)
+    n_gram_instance.calculate_log_probabilities()
     prediction = ''
-    predict = a.predict_next_sentence((1, 301))
+    predict = n_gram_instance.predict_next_sentence((1, 301))
     print(predict)
     for i in range(len(predict)):
         prediction = prediction + storage_instance.get_original_by(predict[i]) + ' '
