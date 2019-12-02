@@ -73,7 +73,6 @@ class NGramTrie:
 
     def predict_next_sentence(self, prefix):
         if isinstance(prefix, tuple) and len(prefix) == self.size - 1:
-            print(len(self.gram_log_probabilities))
             for k in range(round(len(self.gram_log_probabilities)/2)):
                 maximum = -32000
                 prefix = list(prefix)
@@ -134,18 +133,18 @@ def split_by_sentence(text: str) -> list:
     return corpus
 
 
-def big_text():
+def big_text(text, n_gram_size, n_gram):
     storage_instance = WordStorage()
-    n_gram_instance = NGramTrie(3)
-    corpus = split_by_sentence(REFERENCE_TEXT)
+    n_gram_instance = NGramTrie(n_gram_size)
+    corpus = split_by_sentence(text)
     for j in corpus:
         storage_instance.from_corpus(tuple(j))
     encoded_corpus = encode(storage_instance, corpus)
     n_gram_instance.fill_from_sentence(encoded_corpus)
     n_gram_instance.calculate_log_probabilities()
     prediction = ''
-    predict = n_gram_instance.predict_next_sentence((1, 301))
+    predict = n_gram_instance.predict_next_sentence(n_gram)
     print(predict)
-    for i in enumerate(predict):
-        prediction = prediction + storage_instance.get_original_by(predict[i[1]]) + ' '
+    for i in predict:
+        prediction = prediction + storage_instance.get_original_by(i) + ' '
     print(prediction)
